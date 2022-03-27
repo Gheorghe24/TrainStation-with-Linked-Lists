@@ -60,9 +60,7 @@ void close_train_station(TrainStation *station) {
         }
        
     } 
-    // if(station->platforms != NULL)
     free(station->platforms);
-    // if(station != NULL)
     free(station);
 }
 
@@ -73,10 +71,6 @@ void close_train_station(TrainStation *station) {
  * f: fisierul in care se face afisarea
  */
 void show_existing_trains(TrainStation *station, FILE *f) {
-    // if(f == NULL) {
-    //     fprintf(stderr, "\nError opened file\n");
-    //     return;
-    // }
      int i = 0;
      if(station == NULL) 
      return;
@@ -219,11 +213,25 @@ void remove_train_cars(TrainStation *station, int platform, int weight) {
     }
 }
 
-int getCurrSize(struct TrainCar* node){
-    int size = 0;
+void add_at_pos(TrainCar* start, int weight, int pos) {
+    TrainCar *ptr = start, *ptr2 = (TrainCar*)malloc(sizeof(TrainCar));
+    ptr2->weight = weight;
+    ptr2->next = NULL;
+    while(pos-1 && ptr->next!=NULL)
+    {
+        ptr = ptr->next;
+        pos--;
+    }
+    ptr2->next = ptr->next;
+    ptr->next = ptr2;
+}
 
-    while(node!=NULL){
-        node = node->next;
+
+int getCurrSize(TrainCar* train) {
+    int size = 0;
+    TrainCar* current = train->next;
+    while(current!=NULL){
+        current = current->next;
         size++;
     }
     return size;
@@ -239,7 +247,30 @@ int getCurrSize(struct TrainCar* node){
  */
 void move_train_cars(TrainStation *station, int platform_a, int pos_a, 
                                 int cars_no, int platform_b, int pos_b) {
-
+        if(station != NULL) {
+            if(station->platforms != NULL) {
+                if(platform_a < station->platforms_no && platform_a >= 0 && platform_b < station->platforms_no && platform_b >= 0) {
+                    if(pos_a + cars_no <= getCurrSize(station->platforms[platform_a]->train_cars) + 1 && pos_b <= getCurrSize(station->platforms[platform_b]->train_cars) + 1 && pos_b >=1) {
+                         for (int i = 0; i < cars_no; i++)
+                        {
+                            int c = 1;
+                            if(station->platforms[platform_a]->train_cars) {
+                            TrainCar *prev = station->platforms[platform_a]->train_cars, *current = prev->next;
+                            while (c!=pos_a + cars_no - 1 - i)
+                            {       
+                                prev = current;
+                                current=current->next;
+                                c++;
+                            }
+                            add_at_pos(station->platforms[platform_b]->train_cars, current->weight, pos_b);
+                            prev->next = current->next;
+                            free(current);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 }
 
 int train_speed(Train *train) {
@@ -322,7 +353,28 @@ int find_optimal_train(TrainStation *station) {
     return i_min;
 }
 
-
+// calculeaza greutatea maxima ptu o secventa de vagoane in c 
+int weight_train(TrainCar *train, int cars_no, TrainCar **pointer) {
+TrainCar *prev = train->next, *current = prev;
+int sum = 0, max = 0;
+for(int j = 0; j < getCurrSize(train) + 1; j++) {
+    sum = 0;
+    for(int i = 0; i < cars_no; i++)
+        {
+            sum = sum + current->weight;
+            current = current->next;
+        } 
+    if(sum > max) {
+        max = sum;
+        *pointer = prev;
+    }
+    if(current==NULL) {
+        return max; 
+    }
+    prev = prev->next;
+    current = prev;
+    }
+}
 /* Gaseste trenul cu incarcatura nedistribuita bine.
  * 
  * station: gara existenta
@@ -331,6 +383,35 @@ int find_optimal_train(TrainStation *station) {
  * return: peronul pe care se afla trenul
  */
 int find_heaviest_sequence_train(TrainStation *station, int cars_no, TrainCar **start_car) {
+    if (cars_no < 0) {
+        *start_car = NULL;
+        return -1;
+    }
+    if(station != NULL) {
+        if(station->platforms != NULL) {
+            //int len = station->platforms_no;
+            int max = 0, weight_i = 0, i_max = 0;
+            TrainCar *pointer = NULL;
+            for(int i = 0;i < station->platforms_no; i++) {
+                if(station->platforms[i]->train_cars!= NULL) {
+                    if(cars_no <= getCurrSize(station->platforms[i]->train_cars)) {
+                        weight_i = weight_train(station->platforms[i]->train_cars, cars_no, &pointer);
+                    if(weight_i > max) {
+                    max = weight_i;
+                    i_max = i;
+                    *start_car = pointer;
+                    }
+                }
+                }
+            }
+            if(max) {
+                return i_max;
+            } 
+            //*start_car = pointer;
+            //return -1;
+        }
+    }
+    *start_car = NULL;
     return -1;
 }
 
@@ -365,10 +446,44 @@ void order_train(TrainStation *station, int platform) {
     }
 }
 
-
+void delete_at_pos(int pos, Train *train)
+{
+    TrainCar *prev = train->train_cars, *current = prev->next;
+        for(int i=0;i<pos-1;i++)
+        {
+            prev = current;
+            current=current->next;
+        }   
+    prev->next = current->next;
+free(current);
+}
 /* Scoate un vagon din trenul supraincarcat.
  * 
  * station: gara existenta
  */
 void fix_overload_train(TrainStation *station) {
+int platform = find_overload_train(station);
+if(platform == -1) {
+    return;
+}
+    if(station!=NULL && station->platforms!= NULL ) {
+        if(station->platforms[platform]!= NULL) {
+        Train *train = station->platforms[platform]; 
+        TrainCar *vagon = train->train_cars;
+            int weight_trains = train->locomotive_power - train_speed(train);
+            if(train_speed(train) == 0)
+            return;
+            int min = weight_trains, i_min = 0 , pos = 0;
+            TrainCar *last = vagon;
+                while(last->next != NULL) {
+                    last = last->next;
+                    pos++;
+                    if(min > weight_trains - last->weight && weight_trains - last->weight >= train->locomotive_power) {
+                        min = weight_trains - last->weight;
+                        i_min = pos; 
+                    }    
+                }
+             delete_at_pos(i_min, station->platforms[platform]);
+        }
+    }
 }
