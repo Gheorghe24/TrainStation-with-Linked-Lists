@@ -433,6 +433,7 @@ void order_train(TrainStation * station, int platform) {
   }
 }
 
+
 void delete_at_pos(int pos, Train * train) {
   TrainCar * prev = train -> train_cars, * current = prev -> next;
   for (int i = 0; i < pos - 1; i++) {
