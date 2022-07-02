@@ -8,10 +8,11 @@ of the employees.
 
 In order to implement the necessary functions, we will use three data structures:
 
-a). TrainStation is the structure that represents the station. 
-The station has several platforms, and each one platform can park a train. 
-The platforms_no field represents the number of platforms in the station, and
+a). TrainStation is the structure that represents the station. \
+The station has several platforms, and each one platform can park a train. \
+The platforms_no field represents the number of platforms in the station, and \
 the platforms field is a vector that contains stationary platforms and trains. 
+
 It is not mandatory that there is a stationary train on each platform at a certain point in time.
 
     struct {
@@ -19,11 +20,13 @@ It is not mandatory that there is a stationary train on each platform at a certa
         Train **platforms;
     } TrainStation;
 
-b). Train este structura care reprezintă un tren. Fiecare tren este format dintr-o locomotivă și o
-secvență de vagoane. Câmpul locomotive_power reprezintă greutatea maximă pe care o poate
-transporta locomotiva. Dacă greutatea totală a vagoanelor depășește această valoare, trenul nu
-va putea pleca din stație. Câmpul train_cars reprezintă primul vagon din secvența de vagoane a
-trenului (este vagonul atașat de locomotivă).
+b). Train is the structure that represents a train. \ Each train consists of a locomotive and a
+wagon sequence. 
+The locomotive_power field represents the maximum weight it can transport the locomotive. 
+
+If the total weight of the wagons exceeds this value, the train does not
+will be able to leave the station. The train_cars field represents the first wagon in 
+the wagon sequence a train (is the wagon attached to the locomotive).
 
     struct {
         int locomotive_power;
