@@ -1,16 +1,18 @@
-Enunț: 
+The Story:
 
-Gara din Hogsmeade se dezvoltă rapid și are nevoie de o digitalizare a
-informației pentru a-și planifica mai ușor activitățile. Scopul nostru este să creăm un program
-care să rezolve operațiile cele mai importante ale gării, pentru a ușura munca angajaților.
-Pentru a putea implementa funcțiile necesare, vom folosi trei structuri de date:
+Hogsmeade Railway Station is developing rapidly and needs to be digitized
+information to make it easier to plan your activities. 
 
-a). TrainStation este structura care reprezintă gara. Gara are mai multe peroane, iar pe fiecare
-peron poate staționa un tren. Câmpul platforms_no reprezintă numărul de peroane al gării, iar
-câmpul platforms este un vector care conține peroanele și trenurile staționate. Nu este
-obligatoriu ca pe fiecare peron să existe un tren staționat la un anumit moment de timp.
+Our goal is to create a program to solve the most important operations of the station, in order to facilitate the work
+of the employees.
 
-Structura folosită :
+In order to implement the necessary functions, we will use three data structures:
+
+a). TrainStation is the structure that represents the station. 
+The station has several platforms, and each one platform can park a train. 
+The platforms_no field represents the number of platforms in the station, and
+the platforms field is a vector that contains stationary platforms and trains. 
+It is not mandatory that there is a stationary train on each platform at a certain point in time.
 
     struct {
         int platforms_no;
