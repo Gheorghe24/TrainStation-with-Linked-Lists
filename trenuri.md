@@ -20,8 +20,8 @@ It is not mandatory that there is a stationary train on each platform at a certa
         Train **platforms;
     } TrainStation;
 
-b). Train is the structure that represents a train. \ Each train consists of a locomotive and a
-wagon sequence. 
+b). Train is the structure that represents a train. \
+Each train consists of a locomotive and a wagon sequence. 
 The locomotive_power field represents the maximum weight it can transport the locomotive. 
 
 If the total weight of the wagons exceeds this value, the train does not
@@ -33,9 +33,9 @@ the wagon sequence a train (is the wagon attached to the locomotive).
         TrainCar* train_cars;
     } Train;
   
-c). TrainCar este structura care reprezintă un vagon. Fiecare vagon are o greutate asociată care
-este reținută în câmpul weight. Câmpul next reprezintă următorul vagon din secvența de
-vagoane a trenului.
+c). TrainCar is the structure that represents a wagon. Each wagon has an associated 
+weight that is retained in the weight field. The next field represents the next wagon 
+in the sequence of train wagons.
 
     struct {
         int weight;
