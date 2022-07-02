@@ -10,10 +10,12 @@ peron poate staționa un tren. Câmpul platforms_no reprezintă numărul de pero
 câmpul platforms este un vector care conține peroanele și trenurile staționate. Nu este
 obligatoriu ca pe fiecare peron să existe un tren staționat la un anumit moment de timp.
 
-  struct {
-  int platforms_no;
-  Train **platforms;
-  } TrainStation;
+Structura folosită :
+
+    struct {
+        int platforms_no;
+        Train **platforms;
+    } TrainStation;
 
 b). Train este structura care reprezintă un tren. Fiecare tren este format dintr-o locomotivă și o
 secvență de vagoane. Câmpul locomotive_power reprezintă greutatea maximă pe care o poate
@@ -21,16 +23,16 @@ transporta locomotiva. Dacă greutatea totală a vagoanelor depășește aceast�
 va putea pleca din stație. Câmpul train_cars reprezintă primul vagon din secvența de vagoane a
 trenului (este vagonul atașat de locomotivă).
 
-  struct {
-  int locomotive_power;
-  TrainCar* train_cars;
-  } Train;
+    struct {
+        int locomotive_power;
+        TrainCar* train_cars;
+    } Train;
   
 c). TrainCar este structura care reprezintă un vagon. Fiecare vagon are o greutate asociată care
 este reținută în câmpul weight. Câmpul next reprezintă următorul vagon din secvența de
 vagoane a trenului.
 
-struct {
-int weight;
-TrainCar *next;
-} TrainCar;
+    struct {
+        int weight;
+        TrainCar *next;
+    } TrainCar;
