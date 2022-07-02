@@ -1,4 +1,5 @@
 Enunț: 
+
 Gara din Hogsmeade se dezvoltă rapid și are nevoie de o digitalizare a
 informației pentru a-și planifica mai ușor activitățile. Scopul nostru este să creăm un program
 care să rezolve operațiile cele mai importante ale gării, pentru a ușura munca angajaților.
